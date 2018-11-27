@@ -1,11 +1,12 @@
-package com.sunhill.banking;
+package com.clemencio.morales.banking;
 
-import com.sunhill.model.Money;
+import com.clemencio.morales.model.Money;
 
 import java.math.BigDecimal;
 
 public abstract class BankAccount {
 
+    public static final BigDecimal MAXIMUM_ALLOWED_AMOUNT = new BigDecimal(1_000_000);
     private String owner;
     private Money balance;
     private BankAccountType bankAccountType;
@@ -17,18 +18,10 @@ public abstract class BankAccount {
     }
 
     public void depositMoney(final Money money) {
-//        if(!isGreaterThanZeroAmount(amount)) { //TODO comprobar si traga dinero negativo, no debería
-//            throw new IllegalArgumentException(this.getClass().getSimpleName()
-//                    + ". Error: Amount to deposit cannot be negative");
-//        }
         this.setBalance(Money.euros(this.getBalance().getAmount().add(money.getAmount())));
     }
 
     public void withdrawMoney(final Money money) {
-//        if(!isGreaterThanZeroAmount(amount)) {//TODO comprobar si traga dinero negativo, no debería
-//            throw new IllegalArgumentException(this.getClass().getSimpleName()
-//                    + ". Error: Amount to withdraw cannot be negative");
-//        }
         this.setBalance(Money.euros(this.getBalance().getAmount().subtract(money.getAmount())));
     }
 
@@ -45,6 +38,9 @@ public abstract class BankAccount {
     }
 
     public void setBalance(final Money balance) {
+        if (Money.euros(MAXIMUM_ALLOWED_AMOUNT).getAmount().compareTo(balance.getAmount()) <= 0) {
+            throw new IllegalArgumentException(MAXIMUM_ALLOWED_AMOUNT + " security threshold cannot be broken.");
+        }
         this.balance = balance;
     }
 
