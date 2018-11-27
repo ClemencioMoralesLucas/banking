@@ -14,17 +14,18 @@ public class SavingAccount extends BankAccount {
         this.setInterestRate(interestRate);
     }
 
-    public void calculateAndPayInterest(final Money money) {
-//        if(!Money.isGreaterThanZeroAmount(amount)) { //TODO Check if needed
-//            throw new IllegalArgumentException(this.getClass().getSimpleName()
-//                    + ". Error: Amount to pay with interest cannot be negative");
-//        }
-        this.setBalance(Money.euros(this.getBalance().getAmount().add(money.getAmount())
-                .add(percentage(money.getAmount(), interestRate))));
+    private static BigDecimal percentage(final BigDecimal base, final BigDecimal percentage) {
+        return base.multiply(percentage).divide(ONE_HUNDRED);
     }
 
-    public static BigDecimal percentage(final BigDecimal base, final BigDecimal percentage){
-        return base.multiply(percentage).divide(ONE_HUNDRED);
+    public void calculateAndPayInterest(final BankAccount bankAccountOther, final Money initialAmount) {
+        final Money interest = Money.euros(percentage(initialAmount.getAmount(), interestRate));
+        final Money amountWithInterest = Money.euros(interest.getAmount().add(initialAmount.getAmount()));
+        if (!bankAccountOther.hasEnoughFunds(amountWithInterest)) {
+            throw new IllegalArgumentException(this.getClass().getSimpleName()
+                    + ". Error: Insufficient funds in " + bankAccountOther + " to pay " + amountWithInterest);
+        }
+        this.setBalance(Money.euros(this.getBalance().getAmount().add(amountWithInterest.getAmount())));
     }
 
     public BigDecimal getInterestRate() {

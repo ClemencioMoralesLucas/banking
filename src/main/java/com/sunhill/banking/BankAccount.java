@@ -2,6 +2,8 @@ package com.sunhill.banking;
 
 import com.sunhill.model.Money;
 
+import java.math.BigDecimal;
+
 public abstract class BankAccount {
 
     private String owner;
@@ -52,5 +54,26 @@ public abstract class BankAccount {
 
     public void setBankAccountType(final BankAccountType bankAccountType) {
         this.bankAccountType = bankAccountType;
+    }
+
+    public boolean hasFunds() {
+        return hasEnoughFundsComparedTo(Money.euros(BigDecimal.ZERO));
+    }
+
+    public boolean hasEnoughFunds(final Money amount) {
+        return hasEnoughFundsComparedTo(amount);
+    }
+
+    private boolean hasEnoughFundsComparedTo(final Money amount) {
+        return !(this.getBalance().getAmount().compareTo(amount.getAmount()) == -1);
+    }
+
+    @Override
+    public String toString() {
+        return "BankAccount{" +
+                "owner='" + owner + '\'' +
+                ", balance=" + balance +
+                ", bankAccountType=" + bankAccountType +
+                '}';
     }
 }
