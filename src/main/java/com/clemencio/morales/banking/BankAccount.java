@@ -17,6 +17,10 @@ public abstract class BankAccount {
         this.setBankAccountType(bankAccountType);
     }
 
+    public abstract void calculateAndPayInterest(BankAccount bankAccountOther, Money initialAmount);
+
+    public abstract void transferFromCheckingAccount(BankAccount otherCheckingAccount, Money money);
+
     public void depositMoney(final Money money) {
         this.setBalance(Money.euros(this.getBalance().getAmount().add(money.getAmount())));
     }

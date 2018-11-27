@@ -13,7 +13,8 @@ public class CheckingAccount extends BankAccount {
         this.setOverdraftLimit(overdraftLimit);
     }
 
-    public void transferFromCheckingAccount(final CheckingAccount otherCheckingAccount, final Money money) {
+    @Override
+    public void transferFromCheckingAccount(final BankAccount otherCheckingAccount, final Money money) {
         if (!otherCheckingAccount.getBankAccountType().equals(BankAccountType.CHECKING)) {
             throw new IllegalArgumentException(this.getClass().getSimpleName()
                     + ". Error: Transfer is only allowed between Checking Accounts");
@@ -24,14 +25,20 @@ public class CheckingAccount extends BankAccount {
     }
 
     @Override
+    public void calculateAndPayInterest(BankAccount bankAccountOther, Money initialAmount) {
+        throw new UnsupportedOperationException("Cannot calculate and pay interests in Checking Accounts");
+    }
+
+    @Override
     public void setBalance(final Money money) {
-        final Money possibleFinalBalance = Money.euros(this.getBalance().getAmount().subtract(money.getAmount()));
-        if (possibleFinalBalance.getAmount().compareTo(overdraftLimit) == -1) {
-            throw new IllegalArgumentException(this.getClass().getSimpleName()
-                    + ". Error: Checking account overdrawn, cannot transfer amount");
-        } else {
-            super.setBalance(money);
+        if (this.getBalance() != null) {
+            final Money possibleFinalBalance = Money.euros(this.getBalance().getAmount().subtract(money.getAmount()));
+            if (possibleFinalBalance.getAmount().compareTo(overdraftLimit) == -1) {
+                throw new IllegalArgumentException(this.getClass().getSimpleName()
+                        + ". Error: Checking account overdrawn, cannot transfer amount: " + this);
+            }
         }
+        super.setBalance(money);
     }
 
     public BigDecimal getOverdraftLimit() {
