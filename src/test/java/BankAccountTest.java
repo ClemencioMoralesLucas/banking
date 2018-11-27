@@ -1,8 +1,10 @@
+import com.sunhill.banking.BankAccount;
+import com.sunhill.banking.SavingAccount;
+import com.sunhill.model.Money;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 import static org.testng.Assert.assertEquals;
 
@@ -13,48 +15,46 @@ public class BankAccountTest {
 
     @BeforeMethod
     public void setUp() {
-        this.savingAccount = new SavingAccount("John Wick", new BigDecimal(10_000), new BigDecimal(5.4));
+        this.savingAccount = new SavingAccount("John Wick", Money.euros(new BigDecimal(10_000)), new BigDecimal(5.4));
         //this.checkingAccount = new CheckingAccount(new BigDecimal(1000));
     }
 
     @Test
     public void testDepositUpdatesBalanceIfValidAmountGiven() {
-        final BigDecimal expectedBalance = new BigDecimal(10_010);
-        this.savingAccount.deposit(BigDecimal.TEN);
+        final Money expectedBalance = Money.euros(new BigDecimal(10_010));
+        this.savingAccount.depositMoney(Money.euros(BigDecimal.TEN));
         assertEquals(this.savingAccount.getBalance(), expectedBalance);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class,
-            expectedExceptionsMessageRegExp = ".*Error: Amount to deposit cannot be negative")
+            expectedExceptionsMessageRegExp = "Money cannot be negative. Amount: -1")
     public void testDepositThrowsIllegalArgumentExceptionIfNegativeAmountGiven() {
-        this.savingAccount.deposit(new BigDecimal(-1));
+        this.savingAccount.depositMoney(Money.euros(new BigDecimal(-1)));
     }
 
-    /*@Test                  //TODO KEEP WITH ROUNDING, TESTING BANKACCOUNT.JAVA
+    @Test
     public void testWithdrawalUpdatesBalanceIfValidAmount() {
-        final BigDecimal expectedBalance = new BigDecimal(9999.28);
-        expectedBalance.setScale(2, RoundingMode.CEILING);
-        final BigDecimal amountToWithdraw = new BigDecimal(0.72);
-        amountToWithdraw.setScale(2, RoundingMode.CEILING);
-        this.savingAccount.withdraw(amountToWithdraw);
+        Money expectedBalance = Money.euros(new BigDecimal(9999.28));
+        Money amountToWithdraw = Money.euros(new BigDecimal(0.72));
+        this.savingAccount.withdrawMoney(amountToWithdraw);
         assertEquals(this.savingAccount.getBalance(), expectedBalance);
-    }     */
-
-    @Test
-    public void testDeposit() {
     }
 
-    @Test
-    public void testSetOwner() {
-    }
-
-    @Test
-    public void testSetBalanceThrowsIllegalArgumentExceptionIfUpperLimitBroken() { //1_000_000
-
-    }
-
-    @Test
-    public void testSetBalanceThrowsIllegalArgumentExceptionIfLowerLimitBroken() { //-1_000_000????
-
-    }
+//    @Test
+//    public void testDeposit() {
+//    }
+//
+//    @Test
+//    public void testSetOwner() {
+//    }
+//
+//    @Test
+//    public void testSetBalanceThrowsIllegalArgumentExceptionIfUpperLimitBroken() { //1_000_000
+//
+//    }
+//
+//    @Test
+//    public void testSetBalanceThrowsIllegalArgumentExceptionIfLowerLimitBroken() { //-1_000_000????
+//
+//    }
 }
