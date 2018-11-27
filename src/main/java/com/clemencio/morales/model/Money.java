@@ -31,7 +31,7 @@ public class Money {
     }
 
     public static boolean isGreaterThanZeroAmount(final BigDecimal amount) {
-        return amount.compareTo(BigDecimal.ZERO) == 1;
+        return amount.compareTo(BigDecimal.ZERO) >= 0;
     }
 
     public BigDecimal getAmount() {

@@ -53,7 +53,7 @@ public abstract class BankAccount {
     }
 
     public boolean hasFunds() {
-        return hasEnoughFundsComparedTo(Money.euros(BigDecimal.ZERO));
+        return hasEnoughFundsComparedTo(Money.euros(new BigDecimal(0.01)));
     }
 
     public boolean hasEnoughFunds(final Money amount) {
