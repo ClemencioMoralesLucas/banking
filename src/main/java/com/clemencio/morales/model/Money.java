@@ -1,4 +1,4 @@
-package com.sunhill.model;
+package com.clemencio.morales.model;
 
 import org.apache.commons.lang3.StringUtils;
 

@@ -1,4 +1,4 @@
-package com.sunhill.banking;
+package com.clemencio.morales.banking;
 
 public enum BankAccountType {
 

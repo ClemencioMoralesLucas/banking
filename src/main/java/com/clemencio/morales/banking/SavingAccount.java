@@ -1,6 +1,6 @@
-package com.sunhill.banking;
+package com.clemencio.morales.banking;
 
-import com.sunhill.model.Money;
+import com.clemencio.morales.model.Money;
 
 import java.math.BigDecimal;
 
