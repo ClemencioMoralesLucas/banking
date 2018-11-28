@@ -33,11 +33,17 @@ public class SavingAccount extends BankAccount {
 
     @Override
     public void transferFromCheckingAccount(BankAccount otherCheckingAccount, Money money) {
-        throw new UnsupportedOperationException("Cannot transfer from other accounts in Saving Accounts");
+        throw new UnsupportedOperationException("Error: Cannot transfer from other accounts in Saving Accounts");
     }
 
-    public BigDecimal getInterestRate() {
-        return this.interestRate;
+    @Override
+    public BigDecimal getOverdraftLimit() {
+        throw new UnsupportedOperationException("Error: Saving Account does not support getting overdrawn");
+    }
+
+    @Override
+    public void setOverdraftLimit(BigDecimal overdraftLimit) {
+        throw new UnsupportedOperationException("Error: Saving Account does not support setting overdrawn");
     }
 
     public void setInterestRate(final BigDecimal interestRate) { //check is valid interestrate

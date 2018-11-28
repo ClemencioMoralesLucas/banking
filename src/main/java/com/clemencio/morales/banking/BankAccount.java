@@ -21,6 +21,10 @@ public abstract class BankAccount {
 
     public abstract void transferFromCheckingAccount(BankAccount otherCheckingAccount, Money money);
 
+    public abstract BigDecimal getOverdraftLimit();
+
+    public abstract void setOverdraftLimit(final BigDecimal overdraftLimit);
+
     public void depositMoney(final Money money) {
         this.setBalance(Money.euros(this.getBalance().getAmount().add(money.getAmount())));
     }

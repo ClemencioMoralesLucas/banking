@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 import java.math.BigDecimal;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotEquals;
 
 public class MoneyTest extends BeanTest<Money> {
@@ -26,6 +27,12 @@ public class MoneyTest extends BeanTest<Money> {
         Money.euros(new BigDecimal(-1));
     }
 
+    @Test(expectedExceptions = IllegalArgumentException.class, expectedExceptionsMessageRegExp = "Debt cannot be " +
+            "positive. Amount: 0")
+    public void testDebtInEurosThrowsIllegalArgumentExceptionIfPositiveAmountGiven() {
+        Money.debtInEuros(new BigDecimal(0));
+    }
+
     @Test
     public void testHashCodeIsConsistent() {
         assertEquals(moneyAverage.hashCode(), Money.euros(new BigDecimal(1000)).hashCode());
@@ -37,9 +44,9 @@ public class MoneyTest extends BeanTest<Money> {
         assertEquals(moneyAverage, moneyAverage);
         assertNotEquals(moneyHigh, moneyAverage);
         assertNotEquals(moneyAverage, moneyHigh);
-        assertNotEquals(null, moneyHigh);
         assertNotEquals(StringUtils.EMPTY, moneyHigh);
         assertNotEquals(moneyLow, moneyHigh);
-        assertNotEquals(moneyLow, null);
+        assertNotEquals(moneyLow, StringUtils.EMPTY);
+        assertFalse(moneyHigh.equals(null));
     }
 }

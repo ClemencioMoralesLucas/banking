@@ -37,8 +37,20 @@ public class SavingAccountTest {
     }
 
     @Test(expectedExceptions = UnsupportedOperationException.class,
-            expectedExceptionsMessageRegExp = "Cannot transfer from other accounts in Saving Accounts")
+            expectedExceptionsMessageRegExp = ".*Error: Cannot transfer from other accounts in Saving Accounts")
     public void testTransferFromCheckingAccountThrowsUnsupportedOperationException() {
         this.savingAccountOrigin.transferFromCheckingAccount(null, null);
+    }
+
+    @Test(expectedExceptions = UnsupportedOperationException.class, expectedExceptionsMessageRegExp = ".*Error: Saving " +
+            "Account does not support getting overdrawn")
+    public void testGetOverdraftLimitIsNotAllowedOnSavingAccounts() {
+        this.savingAccountOrigin.getOverdraftLimit();
+    }
+
+    @Test(expectedExceptions = UnsupportedOperationException.class, expectedExceptionsMessageRegExp = ".*Error: Saving " +
+            "Account does not support setting overdrawn")
+    public void testSetOverdraftLimitIsNotAllowedOnSavingAccounts() {
+        this.savingAccountOrigin.setOverdraftLimit(BigDecimal.ONE);
     }
 }

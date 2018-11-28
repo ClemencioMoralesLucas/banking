@@ -19,33 +19,41 @@ public class CheckingAccount extends BankAccount {
             throw new IllegalArgumentException(this.getClass().getSimpleName()
                     + ". Error: Transfer is only allowed between Checking Accounts");
         }
-        otherCheckingAccount.setBalance(Money.euros(otherCheckingAccount.getBalance().getAmount()
-                .subtract(money.getAmount())));
+        BigDecimal finalBalanceAmountForOther = otherCheckingAccount.getBalance().getAmount().subtract(money.getAmount());
         this.setBalance(Money.euros(this.getBalance().getAmount().add(money.getAmount())));
+        final Money finalBalanceForOther = Money.isGreaterThanZeroAmount(finalBalanceAmountForOther) ?
+                Money.euros(finalBalanceAmountForOther) : Money.debtInEuros(finalBalanceAmountForOther);
+        otherCheckingAccount.setBalance(finalBalanceForOther);
     }
 
     @Override
     public void calculateAndPayInterest(BankAccount bankAccountOther, Money initialAmount) {
-        throw new UnsupportedOperationException("Cannot calculate and pay interests in Checking Accounts");
+        throw new UnsupportedOperationException("Error: Cannot calculate and pay interests in Checking Accounts");
     }
 
     @Override
     public void setBalance(final Money money) {
         if (this.getBalance() != null) {
-            final Money possibleFinalBalance = Money.euros(this.getBalance().getAmount().subtract(money.getAmount()));
-            if (possibleFinalBalance.getAmount().compareTo(overdraftLimit) == -1) {
+            if (money.getAmount().compareTo(overdraftLimit) == -1) {
                 throw new IllegalArgumentException(this.getClass().getSimpleName()
-                        + ". Error: Checking account overdrawn, cannot transfer amount: " + this);
+                        + ". Error: Checking account overdrawn, cannot transfer amount: " + money
+                        + " due to overdraft limit: " + this.getOverdraftLimit());
             }
         }
         super.setBalance(money);
     }
 
+    @Override
     public BigDecimal getOverdraftLimit() {
         return this.overdraftLimit;
     }
 
-    public void setOverdraftLimit(final BigDecimal overdraftLimit) { //check is valid
-        this.overdraftLimit = overdraftLimit;
+    @Override
+    public void setOverdraftLimit(final BigDecimal overdraftLimit) {
+        if (overdraftLimit == null || !Money.isGreaterThanZeroAmount(overdraftLimit) ||
+                overdraftLimit.compareTo(new BigDecimal(5000)) == 1) {
+            throw new IllegalArgumentException("Invalid overdraft limit: " + overdraftLimit);
+        }
+        this.overdraftLimit = overdraftLimit.negate();
     }
 }

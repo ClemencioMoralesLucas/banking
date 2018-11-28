@@ -30,6 +30,13 @@ public class Money {
         return new Money(amount, EUR);
     }
 
+    public static Money debtInEuros(final BigDecimal amount) {
+        if (isGreaterThanZeroAmount(amount)) {
+            throw new IllegalArgumentException("Debt cannot be positive. Amount: " + amount);
+        }
+        return new Money(amount, EUR);
+    }
+
     public static boolean isGreaterThanZeroAmount(final BigDecimal amount) {
         return amount.compareTo(BigDecimal.ZERO) >= 0;
     }
