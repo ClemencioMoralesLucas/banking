@@ -1,5 +1,5 @@
 # Banking Kata
-A TDD (Test Driven Development) kata consisting on a set of classes and unit tests for savings accounts and checking accounts:
+A TDD (Test Driven Development) kata with a 100% unit test coverage consisting on a set of classes and unit tests for savings accounts and checking accounts:
 
 Consider two different types of bank accounts – savings accounts and checking accounts. Each account has an owner and a balance.
 Accounts also support deposits and withdrawals of money amounts.
